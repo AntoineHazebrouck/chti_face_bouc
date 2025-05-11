@@ -1,5 +1,5 @@
-import 'package:chti_face_bouc/modeles/membre.dart';
 import 'package:chti_face_bouc/modeles/post.dart';
+import 'package:chti_face_bouc/pages/common/my_name.dart';
 import 'package:chti_face_bouc/services/service_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -15,23 +15,7 @@ class _PageAccueilState extends State<PageAccueil> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        FutureBuilder(
-          future: ServiceFirestore.me(),
-          builder: (BuildContext context, AsyncSnapshot<Membre> snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return Text("loading");
-            }
-
-            if (snapshot.hasData) {
-              final me = snapshot.data!;
-              return Text(
-                "${me.firstname} ${me.lastname}",
-                style: TextStyle(fontSize: 40),
-              );
-            }
-            return Text("No data");
-          },
-        ),
+        MyName(),
         FutureBuilder(
           future: ServiceFirestore.allPosts(),
           builder: (context, snapshot) {

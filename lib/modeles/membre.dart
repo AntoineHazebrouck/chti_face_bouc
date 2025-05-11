@@ -23,7 +23,7 @@ class Membre {
     return Membre(
       reference: document.reference,
       id: document.id,
-      coverPictureUrl: '',
+      coverPictureUrl: document["coverPictureUrl"] ?? '',
       description: '',
       firstname: document["firstname"] ?? '',
       lastname: document["lastname"] ?? '',

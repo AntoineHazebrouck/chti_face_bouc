@@ -1,4 +1,5 @@
 import 'package:chti_face_bouc/pages/page_accueil.dart';
+import 'package:chti_face_bouc/pages/page_profil.dart';
 import 'package:chti_face_bouc/services/service_authentification.dart';
 import 'package:flutter/material.dart';
 
@@ -19,7 +20,7 @@ class _PageNavigationState extends State<PageNavigation> {
       Text("qsd"),
       Text("sfdgffg"),
       Text("ds"),
-      Text("pipipip"),
+      PageProfil(),
     ];
 
     return Scaffold(

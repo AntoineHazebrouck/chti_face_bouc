@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:chti_face_bouc/modeles/membre.dart';
 import 'package:chti_face_bouc/modeles/post.dart';
+import 'package:chti_face_bouc/services/service_authentification.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'service_storage.dart';
@@ -65,5 +66,14 @@ class ServiceFirestore {
     return await membres.doc(memberId).snapshots().map((snapshot) {
       return Membre.toEntity(snapshot);
     }).first;
+  }
+
+  static Future<Membre> me() async {
+    final String? id = ServiceAuthentification.myEmail;
+    if (id == null) {
+      throw Exception("Error getting current user id");
+    } else {
+      return await member(id);
+    }
   }
 }

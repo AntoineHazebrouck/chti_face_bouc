@@ -39,7 +39,7 @@ class ServiceAuthentification {
   }
 
   // Récupérer l'id unique de l'utilisateur
-  String? get myId => instance.currentUser?.uid;
+  static String? get myEmail => instance.currentUser?.email;
 
   // Voir si vous êtes l'utilisateur
   bool isMe(String profileId) {

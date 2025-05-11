@@ -76,14 +76,16 @@ class _PageAuthentificationState extends State<PageAuthentification> {
                           ),
                           controller: _passwordController,
                         ),
-                        TextField(
-                          decoration: InputDecoration(label: Text("Prénom")),
-                          controller: _firstnameController,
-                        ),
-                        TextField(
-                          decoration: InputDecoration(label: Text("Nom")),
-                          controller: _lastnameController,
-                        ),
+                        if (_register)
+                          TextField(
+                            decoration: InputDecoration(label: Text("Prénom")),
+                            controller: _firstnameController,
+                          ),
+                        if (_register)
+                          TextField(
+                            decoration: InputDecoration(label: Text("Nom")),
+                            controller: _lastnameController,
+                          ),
                       ],
                     ),
                   ),

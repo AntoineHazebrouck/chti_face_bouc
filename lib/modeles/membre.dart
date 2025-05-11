@@ -27,7 +27,7 @@ class Membre {
       description: '',
       firstname: document["firstname"] ?? '',
       lastname: document["lastname"] ?? '',
-      profilePictureUrl: '',
+      profilePictureUrl: document["profilePictureUrl"] ?? '',
     );
   }
 }

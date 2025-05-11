@@ -36,7 +36,7 @@ class _PageAccueilState extends State<PageAccueil> {
 
   Card _postCard(Post post) {
     return Card.outlined(
-      margin: EdgeInsets.all(10),
+      margin: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
       child: ListTile(
         subtitle: Center(
           child: Column(
@@ -53,10 +53,10 @@ class _PageAccueilState extends State<PageAccueil> {
             post.member.profilePictureUrl.isNotEmpty
                 ? CircleAvatar(
                   backgroundImage:
-                      Image.network(post.member.profilePictureUrl!).image,
+                      Image.network(post.member.profilePictureUrl).image,
                 )
                 : CircleAvatar(child: Icon(Icons.person)),
-            Text(post.text),
+            Text("${post.member.firstname} ${post.member.lastname}"),
           ],
         ),
         trailing: Text(post.date.toDate().toIso8601String()),

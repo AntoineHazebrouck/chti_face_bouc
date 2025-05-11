@@ -5,8 +5,8 @@ class Membre {
   final String id;
   final String firstname;
   final String lastname;
-  final String profilePicture;
-  final String coverPicture;
+  final String profilePictureUrl;
+  final String coverPictureUrl;
   final String description;
 
   Membre({
@@ -14,8 +14,8 @@ class Membre {
     required this.id,
     required this.firstname,
     required this.lastname,
-    required this.profilePicture,
-    required this.coverPicture,
+    required this.profilePictureUrl,
+    required this.coverPictureUrl,
     required this.description,
   });
 
@@ -23,11 +23,11 @@ class Membre {
     return Membre(
       reference: document.reference,
       id: document.id,
-      coverPicture: '',
+      coverPictureUrl: '',
       description: '',
-      firstname: "",
-      lastname: '',
-      profilePicture: '',
+      firstname: document["firstname"] ?? '',
+      lastname: document["lastname"] ?? '',
+      profilePictureUrl: '',
     );
   }
 }

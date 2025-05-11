@@ -1,6 +1,3 @@
-import 'dart:ui';
-
-import 'package:chti_face_bouc/modeles/membre.dart';
 import 'package:chti_face_bouc/modeles/post.dart';
 import 'package:chti_face_bouc/services/service_firestore.dart';
 import 'package:flutter/material.dart';
@@ -13,15 +10,6 @@ class PageAccueil extends StatefulWidget {
 }
 
 class _PageAccueilState extends State<PageAccueil> {
-  //   late final List<Post> posts;
-
-  // @override
-  //   void initState() {
-  //     super.initState();
-
-  //     posts = ServiceFirestore.allPosts();
-  //   }
-
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
@@ -32,9 +20,10 @@ class _PageAccueilState extends State<PageAccueil> {
         }
 
         if (snapshot.hasData) {
+          final posts = snapshot.data!;
           return ListView(
             children:
-                snapshot.data!
+                posts
                     // TODO faire les jointures avec le joueur
                     .map(_postCard)
                     .toList(),
@@ -46,7 +35,6 @@ class _PageAccueilState extends State<PageAccueil> {
   }
 
   Card _postCard(Post post) {
-    // final Membre poster = await ServiceFirestore.member(post.member).first;
     return Card.outlined(
       margin: EdgeInsets.all(10),
       child: ListTile(
@@ -62,8 +50,13 @@ class _PageAccueilState extends State<PageAccueil> {
           spacing: 10,
           mainAxisSize: MainAxisSize.min,
           children: [
-            CircleAvatar(backgroundImage: Image.network(post.imageUrl!).image),
-            Text(post.member),
+            post.member.profilePictureUrl.isNotEmpty
+                ? CircleAvatar(
+                  backgroundImage:
+                      Image.network(post.member.profilePictureUrl!).image,
+                )
+                : CircleAvatar(child: Icon(Icons.person)),
+            Text(post.text),
           ],
         ),
         trailing: Text(post.date.toDate().toIso8601String()),

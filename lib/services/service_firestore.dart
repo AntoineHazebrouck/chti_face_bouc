@@ -49,20 +49,16 @@ class ServiceFirestore {
   }
 
   static Future<List<Post>> allPosts() async {
-    // final allPosts = posts.orderBy("date", descending: true).snapshots();
-    // final allMembers = membres.get
-    return await Future.wait(
-      await posts
-          .orderBy("date", descending: true)
-          .snapshots()
-          .map((snapshot) {
-            return snapshot.docs.map((post) async {
-              return Post.toEntity(post, await member(post['member']));
-            });
-          })
-          .expand((list) => list)
-          .toList(),
-    );
+    final data = await posts.orderBy("date", descending: true).get();
+    final docs = data.docs;
+    // .snapshots().toList();
+    final mapped =
+        docs.map((doc) async {
+          return Post.toEntity(doc, await member(doc["member"]));
+        }).toList();
+
+    final toto = Future.wait(mapped);
+    return toto;
   }
 
   static Future<Membre> member(String memberId) async {

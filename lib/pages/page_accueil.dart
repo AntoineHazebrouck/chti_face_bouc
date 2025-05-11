@@ -56,29 +56,58 @@ class _PageAccueilState extends State<PageAccueil> {
   Card _postCard(Post post) {
     return Card.outlined(
       margin: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-      child: ListTile(
-        subtitle: Center(
-          child: Column(
-            children: [
-              Text(post.text),
-              if (post.imageUrl != null) Image.network(post.imageUrl!),
-            ],
+      child: Column(
+        spacing: 10,
+        children: [
+          ListTile(
+            leading: Row(
+              spacing: 10,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                post.member.profilePictureUrl.isNotEmpty
+                    ? CircleAvatar(
+                      backgroundImage:
+                          Image.network(post.member.profilePictureUrl).image,
+                    )
+                    : CircleAvatar(child: Icon(Icons.person)),
+                Text("${post.member.firstname} ${post.member.lastname}"),
+              ],
+            ),
+            trailing: Text(post.date.toDate().toIso8601String()),
           ),
-        ),
-        leading: Row(
-          spacing: 10,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            post.member.profilePictureUrl.isNotEmpty
-                ? CircleAvatar(
-                  backgroundImage:
-                      Image.network(post.member.profilePictureUrl).image,
-                )
-                : CircleAvatar(child: Icon(Icons.person)),
-            Text("${post.member.firstname} ${post.member.lastname}"),
-          ],
-        ),
-        trailing: Text(post.date.toDate().toIso8601String()),
+          Divider(height: 10),
+          Center(
+            child: Column(
+              children: [
+                Text(post.text),
+                if (post.imageUrl != null) Image.network(post.imageUrl!),
+              ],
+            ),
+          ),
+          Divider(height: 10),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                OutlinedButton.icon(
+                  onPressed: () {
+                    // TODO
+                  },
+                  label: Text("${post.likes.length} Likes"),
+                  icon: Icon(Icons.star_border),
+                ),
+                OutlinedButton.icon(
+                  onPressed: () {
+                    // TODO
+                  },
+                  label: Text("Commenter"),
+                  icon: Icon(Icons.chat_bubble_outline),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }

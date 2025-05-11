@@ -8,7 +8,7 @@ class Post {
   final String text;
   final String? imageUrl;
   final Timestamp date;
-  final List<dynamic> likes;
+  final List<Membre> likes;
   final Membre member;
 
   Post({

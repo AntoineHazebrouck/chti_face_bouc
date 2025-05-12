@@ -1,6 +1,7 @@
 import 'package:chti_face_bouc/pages/page_accueil.dart';
 import 'package:chti_face_bouc/pages/page_profil.dart';
 import 'package:chti_face_bouc/services/service_authentification.dart';
+import 'package:chti_face_bouc/services/service_firestore.dart';
 import 'package:flutter/material.dart';
 
 class PageNavigation extends StatefulWidget {
@@ -20,7 +21,15 @@ class _PageNavigationState extends State<PageNavigation> {
       Text("qsd"),
       Text("sfdgffg"),
       Text("ds"),
-      PageProfil(),
+      FutureBuilder(
+        future: ServiceFirestore.me(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return PageProfil(member: snapshot.data!);
+          }
+          return Text("Error fetching self profile");
+        },
+      ),
     ];
 
     return Scaffold(

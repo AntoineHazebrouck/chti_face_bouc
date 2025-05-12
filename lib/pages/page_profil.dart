@@ -7,14 +7,11 @@ import 'package:chti_face_bouc/services/service_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
-class PageProfil extends StatefulWidget {
-  const PageProfil({super.key});
+class PageProfil extends StatelessWidget {
+  final Membre member;
 
-  @override
-  State<PageProfil> createState() => _PageProfilState();
-}
+  const PageProfil({super.key, required this.member});
 
-class _PageProfilState extends State<PageProfil> {
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -30,9 +27,12 @@ class _PageProfilState extends State<PageProfil> {
                 children: [
                   Stack(
                     alignment: Alignment.bottomLeft,
-                    children: [_cover(context, me), _avatar(me)],
+                    children: [
+                      _cover(context, member, me),
+                      _avatar(member, me),
+                    ],
                   ),
-                  Text("${me.firstname} ${me.lastname}"),
+                  Text("${member.firstname} ${member.lastname}"),
                   Divider(height: 10),
                 ],
               );
@@ -44,7 +44,7 @@ class _PageProfilState extends State<PageProfil> {
     );
   }
 
-  Widget _photoSelector(Membre me, String imageUrl) {
+  Widget _photoSelector(Membre selected, Membre me, String imageUrl) {
     _takePicture(ImageSource source, String name) async {
       final XFile? xFile = await ImagePicker().pickImage(
         source: source,
@@ -59,15 +59,18 @@ class _PageProfilState extends State<PageProfil> {
       );
     }
 
-    return ElevatedButton(
-      onPressed: () {
-        _takePicture(ImageSource.gallery, imageUrl);
-      },
-      child: Icon(Icons.photo),
+    return Visibility(
+      visible: selected.id == me.id,
+      child: ElevatedButton(
+        onPressed: () {
+          _takePicture(ImageSource.gallery, imageUrl);
+        },
+        child: Icon(Icons.photo),
+      ),
     );
   }
 
-  Widget _cover(BuildContext context, Membre me) {
+  Widget _cover(BuildContext context, Membre selected, Membre me) {
     return Stack(
       alignment: Alignment.bottomRight,
       children: [
@@ -75,19 +78,21 @@ class _PageProfilState extends State<PageProfil> {
           height: 150,
           width: MediaQuery.of(context).size.width,
           color: Colors.red,
-          child: Image.network(me.coverPictureUrl, fit: BoxFit.cover),
+          child: Image.network(selected.coverPictureUrl, fit: BoxFit.cover),
         ),
-        _photoSelector(me, me.coverPictureUrl),
+        // TODO check on phone
+        _photoSelector(selected, me, me.coverPictureUrl),
       ],
     );
   }
 
-  Widget _avatar(Membre me) {
+  Widget _avatar(Membre selected, Membre me) {
     return Stack(
       alignment: Alignment.bottomLeft,
       children: [
-        Avatar(member: me, size: 55),
-        _photoSelector(me, me.profilePictureUrl),
+        Avatar(member: selected, size: 55),
+        // TODO check on phone
+        _photoSelector(selected, me, me.profilePictureUrl),
       ],
     );
   }

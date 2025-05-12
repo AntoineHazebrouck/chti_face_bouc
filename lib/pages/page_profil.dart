@@ -1,8 +1,11 @@
+import 'dart:io';
+
 import 'package:chti_face_bouc/modeles/membre.dart';
 import 'package:chti_face_bouc/pages/common/avatar.dart';
 import 'package:chti_face_bouc/pages/common/my_name.dart';
 import 'package:chti_face_bouc/services/service_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 class PageProfil extends StatefulWidget {
   const PageProfil({super.key});
@@ -41,8 +44,27 @@ class _PageProfilState extends State<PageProfil> {
     );
   }
 
-  Widget _photoSelector() {
-    return ElevatedButton(onPressed: () {}, child: Icon(Icons.photo));
+  Widget _photoSelector(Membre me, String imageUrl) {
+    _takePicture(ImageSource source, String name) async {
+      final XFile? xFile = await ImagePicker().pickImage(
+        source: source,
+        maxWidth: 500,
+      );
+      if (xFile == null) return;
+      ServiceFirestore.updateImage(
+        file: File(xFile.path),
+        folder: "members",
+        memberId: me.id,
+        imageName: name,
+      );
+    }
+
+    return ElevatedButton(
+      onPressed: () {
+        _takePicture(ImageSource.gallery, imageUrl);
+      },
+      child: Icon(Icons.photo),
+    );
   }
 
   Widget _cover(BuildContext context, Membre me) {
@@ -55,7 +77,7 @@ class _PageProfilState extends State<PageProfil> {
           color: Colors.red,
           child: Image.network(me.coverPictureUrl, fit: BoxFit.cover),
         ),
-        _photoSelector(),
+        _photoSelector(me, me.coverPictureUrl),
       ],
     );
   }
@@ -63,7 +85,10 @@ class _PageProfilState extends State<PageProfil> {
   Widget _avatar(Membre me) {
     return Stack(
       alignment: Alignment.bottomLeft,
-      children: [Avatar(member: me, size: 55), _photoSelector()],
+      children: [
+        Avatar(member: me, size: 55),
+        _photoSelector(me, me.profilePictureUrl),
+      ],
     );
   }
 }

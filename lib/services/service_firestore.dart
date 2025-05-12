@@ -1,3 +1,4 @@
+
 import 'dart:io';
 
 import 'package:chti_face_bouc/modeles/membre.dart';
@@ -25,13 +26,14 @@ class ServiceFirestore {
     });
   }
 
-  //Mettre à jour un membre
-  updateMember({required String id, required Map<String, dynamic> data}) {
-    membres.doc(id).update(data);
+  static Future<void> updateMember({
+    required String id,
+    required Map<String, dynamic> data,
+  }) async {
+    await membres.doc(id).update(data);
   }
 
-  //stockage et mise à jour d'une image
-  updateImage({
+  static updateImage({
     required File file,
     required String folder,
     required String memberId,
@@ -45,7 +47,10 @@ class ServiceFirestore {
           imageName: imageName,
         )
         .then((imageUrl) {
-          updateMember(id: memberId, data: {imageName: imageUrl});
+          ServiceFirestore.updateMember(
+            id: memberId,
+            data: {imageName: imageUrl},
+          );
         });
   }
 

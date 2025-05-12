@@ -4,6 +4,7 @@ import 'package:chti_face_bouc/modeles/membre.dart';
 import 'package:chti_face_bouc/pages/common/avatar.dart';
 import 'package:chti_face_bouc/pages/common/my_name.dart';
 import 'package:chti_face_bouc/pages/common/posts_list.dart';
+import 'package:chti_face_bouc/pages/page_profil_modif.dart';
 import 'package:chti_face_bouc/services/service_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -33,7 +34,24 @@ class PageProfil extends StatelessWidget {
                       _avatar(member, me),
                     ],
                   ),
-                  Text("${member.firstname} ${member.lastname}"),
+                  Row(
+                    spacing: 10,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text("${member.firstname} ${member.lastname}"),
+                      ElevatedButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => PageProfilModif.from(me),
+                            ),
+                          );
+                        },
+                        child: Text("Modifier mes infos"),
+                      ),
+                    ],
+                  ),
                   Divider(height: 10),
                 ],
               );
@@ -43,12 +61,7 @@ class PageProfil extends StatelessWidget {
         ),
         FutureBuilder(
           future: ServiceFirestore.postsByMember(member.id),
-          // future: ServiceFirestore.allPosts(),
           builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return Text("loading");
-            }
-
             if (snapshot.hasData) {
               final posts = snapshot.data!;
               return PostsList(posts: posts);

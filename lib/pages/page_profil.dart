@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:chti_face_bouc/modeles/membre.dart';
 import 'package:chti_face_bouc/pages/common/avatar.dart';
+import 'package:chti_face_bouc/pages/common/member_builder.dart';
 import 'package:chti_face_bouc/pages/common/my_name.dart';
 import 'package:chti_face_bouc/pages/common/posts_list.dart';
 import 'package:chti_face_bouc/pages/page_profil_modif.dart';
@@ -35,39 +36,28 @@ class _PageProfilState extends State<PageProfil> {
               return Column(
                 spacing: 15,
                 children: [
-                  FutureBuilder(
-                    future: ServiceFirestore.member(widget.memberId),
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        final member = snapshot.data!;
-                        return Stack(
-                          alignment: Alignment.bottomLeft,
-                          children: [
-                            _cover(context, member, me),
-                            _avatar(member, me),
-                          ],
-                        );
-                      }
-                      return Text("Loading data");
+                  MemberBuilder(
+                    memberId: widget.memberId,
+                    child: (member) {
+                      return Stack(
+                        alignment: Alignment.bottomLeft,
+                        children: [
+                          _cover(context, member, me),
+                          _avatar(member, me),
+                        ],
+                      );
                     },
                   ),
                   Row(
                     spacing: 10,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      FutureBuilder(
-                        future: ServiceFirestore.member(widget.memberId),
-                        builder: (context, snapshot) {
-                          if (snapshot.hasData) {
-                            final member = snapshot.data!;
-                            return Text(
-                              "${member.firstname} ${member.lastname}",
-                            );
-                          }
-                          return Text("Loading data");
+                      MemberBuilder(
+                        memberId: widget.memberId,
+                        child: (member) {
+                          return Text("${member.firstname} ${member.lastname}");
                         },
                       ),
-
                       ElevatedButton(
                         onPressed: () {
                           Navigator.push(
@@ -78,7 +68,6 @@ class _PageProfilState extends State<PageProfil> {
                           ).then((value) {
                             setState(() {});
                           });
-                          // then set state
                         },
                         child: Text("Modifier mes infos"),
                       ),

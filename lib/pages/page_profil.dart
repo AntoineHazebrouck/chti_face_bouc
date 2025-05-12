@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:chti_face_bouc/modeles/membre.dart';
 import 'package:chti_face_bouc/pages/common/avatar.dart';
-import 'package:chti_face_bouc/pages/common/member_builder.dart';
+import 'package:chti_face_bouc/pages/common/simple_future_builder.dart';
 import 'package:chti_face_bouc/pages/common/my_name.dart';
 import 'package:chti_face_bouc/pages/common/posts_list.dart';
 import 'package:chti_face_bouc/pages/page_profil_modif.dart';
@@ -20,9 +20,6 @@ class PageProfil extends StatefulWidget {
 }
 
 class _PageProfilState extends State<PageProfil> {
-  // TODO refactor bug reload when changing profile
-  // TODO don't get member from parent
-
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -36,8 +33,8 @@ class _PageProfilState extends State<PageProfil> {
               return Column(
                 spacing: 15,
                 children: [
-                  MemberBuilder(
-                    memberId: widget.memberId,
+                  SimpleFutureBuilder(
+                    future: ServiceFirestore.member(widget.memberId),
                     child: (member) {
                       return Stack(
                         alignment: Alignment.bottomLeft,
@@ -52,8 +49,8 @@ class _PageProfilState extends State<PageProfil> {
                     spacing: 10,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      MemberBuilder(
-                        memberId: widget.memberId,
+                      SimpleFutureBuilder(
+                        future: ServiceFirestore.member(widget.memberId),
                         child: (member) {
                           return Text("${member.firstname} ${member.lastname}");
                         },

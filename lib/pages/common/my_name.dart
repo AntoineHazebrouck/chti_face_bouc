@@ -1,4 +1,5 @@
 import 'package:chti_face_bouc/modeles/membre.dart';
+import 'package:chti_face_bouc/pages/common/simple_future_builder.dart';
 import 'package:chti_face_bouc/services/service_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -7,6 +8,8 @@ class MyName extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // return SimpleFutureBuilder(future: memberId, child: child)
+    
     return FutureBuilder(
       future: ServiceFirestore.me(),
       builder: (BuildContext context, AsyncSnapshot<Membre> snapshot) {

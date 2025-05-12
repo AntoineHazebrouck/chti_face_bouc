@@ -1,4 +1,5 @@
 import 'package:chti_face_bouc/modeles/post.dart';
+import 'package:chti_face_bouc/pages/common/avatar.dart';
 import 'package:chti_face_bouc/pages/common/my_name.dart';
 import 'package:chti_face_bouc/services/service_firestore.dart';
 import 'package:flutter/material.dart';
@@ -48,12 +49,7 @@ class _PageAccueilState extends State<PageAccueil> {
               spacing: 10,
               mainAxisSize: MainAxisSize.min,
               children: [
-                post.member.profilePictureUrl.isNotEmpty
-                    ? CircleAvatar(
-                      backgroundImage:
-                          Image.network(post.member.profilePictureUrl).image,
-                    )
-                    : CircleAvatar(child: Icon(Icons.person)),
+                Avatar(member: post.member),
                 Text("${post.member.firstname} ${post.member.lastname}"),
               ],
             ),

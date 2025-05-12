@@ -25,7 +25,7 @@ class _PageNavigationState extends State<PageNavigation> {
         future: ServiceFirestore.me(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            return PageProfil(member: snapshot.data!);
+            return PageProfil(memberId: snapshot.data!.id);
           }
           return Text("Error fetching self profile");
         },

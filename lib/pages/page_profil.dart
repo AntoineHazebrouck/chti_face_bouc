@@ -9,10 +9,18 @@ import 'package:chti_face_bouc/services/service_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
-class PageProfil extends StatelessWidget {
-  final Membre member;
+class PageProfil extends StatefulWidget {
+  final String memberId;
 
-  const PageProfil({super.key, required this.member});
+  const PageProfil({super.key, required this.memberId});
+
+  @override
+  State<PageProfil> createState() => _PageProfilState();
+}
+
+class _PageProfilState extends State<PageProfil> {
+  // TODO refactor bug reload when changing profile
+  // TODO don't get member from parent
 
   @override
   Widget build(BuildContext context) {
@@ -27,18 +35,39 @@ class PageProfil extends StatelessWidget {
               return Column(
                 spacing: 15,
                 children: [
-                  Stack(
-                    alignment: Alignment.bottomLeft,
-                    children: [
-                      _cover(context, member, me),
-                      _avatar(member, me),
-                    ],
+                  FutureBuilder(
+                    future: ServiceFirestore.member(widget.memberId),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        final member = snapshot.data!;
+                        return Stack(
+                          alignment: Alignment.bottomLeft,
+                          children: [
+                            _cover(context, member, me),
+                            _avatar(member, me),
+                          ],
+                        );
+                      }
+                      return Text("Loading data");
+                    },
                   ),
                   Row(
                     spacing: 10,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text("${member.firstname} ${member.lastname}"),
+                      FutureBuilder(
+                        future: ServiceFirestore.member(widget.memberId),
+                        builder: (context, snapshot) {
+                          if (snapshot.hasData) {
+                            final member = snapshot.data!;
+                            return Text(
+                              "${member.firstname} ${member.lastname}",
+                            );
+                          }
+                          return Text("Loading data");
+                        },
+                      ),
+
                       ElevatedButton(
                         onPressed: () {
                           Navigator.push(
@@ -46,7 +75,10 @@ class PageProfil extends StatelessWidget {
                             MaterialPageRoute(
                               builder: (context) => PageProfilModif.from(me),
                             ),
-                          );
+                          ).then((value) {
+                            setState(() {});
+                          });
+                          // then set state
                         },
                         child: Text("Modifier mes infos"),
                       ),
@@ -60,7 +92,7 @@ class PageProfil extends StatelessWidget {
           },
         ),
         FutureBuilder(
-          future: ServiceFirestore.postsByMember(member.id),
+          future: ServiceFirestore.postsByMember(widget.memberId),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               final posts = snapshot.data!;

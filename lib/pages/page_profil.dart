@@ -1,3 +1,4 @@
+import 'package:chti_face_bouc/modeles/membre.dart';
 import 'package:chti_face_bouc/pages/common/avatar.dart';
 import 'package:chti_face_bouc/pages/common/my_name.dart';
 import 'package:chti_face_bouc/services/service_firestore.dart';
@@ -26,18 +27,7 @@ class _PageProfilState extends State<PageProfil> {
                 children: [
                   Stack(
                     alignment: Alignment.bottomLeft,
-                    children: [
-                      Container(
-                        height: 150,
-                        width: MediaQuery.of(context).size.width,
-                        color: Colors.red,
-                        child: Image.network(
-                          me.coverPictureUrl,
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                      Avatar(member: me, size: 55),
-                    ],
+                    children: [_cover(context, me), _avatar(me)],
                   ),
                   Text("${me.firstname} ${me.lastname}"),
                   Divider(height: 10),
@@ -48,6 +38,32 @@ class _PageProfilState extends State<PageProfil> {
           },
         ),
       ],
+    );
+  }
+
+  Widget _photoSelector() {
+    return ElevatedButton(onPressed: () {}, child: Icon(Icons.photo));
+  }
+
+  Widget _cover(BuildContext context, Membre me) {
+    return Stack(
+      alignment: Alignment.bottomRight,
+      children: [
+        Container(
+          height: 150,
+          width: MediaQuery.of(context).size.width,
+          color: Colors.red,
+          child: Image.network(me.coverPictureUrl, fit: BoxFit.cover),
+        ),
+        _photoSelector(),
+      ],
+    );
+  }
+
+  Widget _avatar(Membre me) {
+    return Stack(
+      alignment: Alignment.bottomLeft,
+      children: [Avatar(member: me, size: 55), _photoSelector()],
     );
   }
 }

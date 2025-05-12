@@ -1,12 +1,15 @@
 import 'package:chti_face_bouc/modeles/membre.dart';
+import 'package:chti_face_bouc/services/service_authentification.dart';
+import 'package:chti_face_bouc/services/service_firestore.dart';
 import 'package:flutter/material.dart';
 
 class PageProfilModif extends StatelessWidget {
+  final Membre me;
   final TextEditingController firstname;
   final TextEditingController lastname;
   final TextEditingController description;
 
-  PageProfilModif.from(Membre me, {super.key})
+  PageProfilModif.from(this.me, {super.key})
     : firstname = TextEditingController(text: me.firstname),
       lastname = TextEditingController(text: me.lastname),
       description = TextEditingController(text: me.description);
@@ -16,7 +19,22 @@ class PageProfilModif extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text("Modifier le profil"),
-        actions: [ElevatedButton(onPressed: () {}, child: Text("Valider"))],
+        actions: [
+          ElevatedButton(
+            onPressed: () {
+              ServiceFirestore.updateMember(
+                id: me.id,
+                firstname: firstname.text,
+                lastname: lastname.text,
+                description: description.text,
+              ).then((value) {
+                if (context.mounted) Navigator.pop(context);
+              });
+              ;
+            },
+            child: Text("Valider"),
+          ),
+        ],
       ),
       body: Card(
         child: Padding(
@@ -38,7 +56,14 @@ class PageProfilModif extends StatelessWidget {
                 decoration: InputDecoration(label: Text("Description")),
                 controller: description,
               ),
-              ElevatedButton(onPressed: () {}, child: Text("Se déconnecter")),
+              ElevatedButton(
+                onPressed: () {
+                  ServiceAuthentification.signOut().then((value) {
+                    if (context.mounted) Navigator.pop(context);
+                  });
+                },
+                child: Text("Se déconnecter"),
+              ),
             ],
           ),
         ),

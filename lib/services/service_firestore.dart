@@ -5,8 +5,6 @@ import 'package:chti_face_bouc/modeles/post.dart';
 import 'package:chti_face_bouc/services/service_authentification.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import 'service_storage.dart';
-
 class ServiceFirestore {
   static final instance = FirebaseFirestore.instance;
 
@@ -27,9 +25,18 @@ class ServiceFirestore {
 
   static Future<void> updateMember({
     required String id,
-    required Map<String, dynamic> data,
+    String? firstname,
+    String? lastname,
+    String? description,
+    String? profilePictureUrl,
   }) async {
-    await membres.doc(id).update(data);
+    final current = await member(id);
+    await membres.doc(id).update({
+      'firstname': firstname ?? current.firstname,
+      'lastname': lastname ?? current.lastname,
+      'description': description ?? current.description,
+      'profilePictureUrl': profilePictureUrl ?? current.profilePictureUrl,
+    });
   }
 
   static updateImage({
@@ -38,19 +45,20 @@ class ServiceFirestore {
     required String memberId,
     required String imageName,
   }) {
-    ServiceStorage()
-        .addImage(
-          file: file,
-          folder: folder,
-          userId: memberId,
-          imageName: imageName,
-        )
-        .then((imageUrl) {
-          ServiceFirestore.updateMember(
-            id: memberId,
-            data: {imageName: imageUrl},
-          );
-        });
+    // TODO
+    // ServiceStorage()
+    //     .addImage(
+    //       file: file,
+    //       folder: folder,
+    //       userId: memberId,
+    //       imageName: imageName,
+    //     )
+    //     .then((imageUrl) {
+    //       ServiceFirestore.updateMember(
+    //         id: memberId,
+    //         data: {imageName: imageUrl},
+    //       );
+    //     });
   }
 
   static Future<List<Post>> allPosts() async {

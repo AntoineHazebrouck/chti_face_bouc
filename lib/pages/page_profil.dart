@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:chti_face_bouc/modeles/membre.dart';
 import 'package:chti_face_bouc/pages/common/avatar.dart';
 import 'package:chti_face_bouc/pages/common/my_name.dart';
+import 'package:chti_face_bouc/pages/common/posts_list.dart';
 import 'package:chti_face_bouc/services/service_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -38,6 +39,21 @@ class PageProfil extends StatelessWidget {
               );
             }
             return Text("Error fetching personnal profile");
+          },
+        ),
+        FutureBuilder(
+          future: ServiceFirestore.postsByMember(member.id),
+          // future: ServiceFirestore.allPosts(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Text("loading");
+            }
+
+            if (snapshot.hasData) {
+              final posts = snapshot.data!;
+              return PostsList(posts: posts);
+            }
+            return Text("No data");
           },
         ),
       ],

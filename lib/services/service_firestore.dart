@@ -1,4 +1,3 @@
-
 import 'dart:io';
 
 import 'package:chti_face_bouc/modeles/membre.dart';
@@ -57,7 +56,6 @@ class ServiceFirestore {
   static Future<List<Post>> allPosts() async {
     final data = await posts.orderBy("date", descending: true).get();
     final docs = data.docs;
-    // .snapshots().toList();
     final mapped =
         docs.map((doc) async {
           return Post.toEntity(doc, await member(doc["member"]));
@@ -65,6 +63,11 @@ class ServiceFirestore {
 
     final toto = Future.wait(mapped);
     return toto;
+  }
+
+  static Future<List<Post>> postsByMember(String memberId) async {
+    final data = await allPosts();
+    return data.where((element) => element.memberId == memberId).toList();
   }
 
   static Future<Membre> member(String memberId) async {

@@ -9,9 +9,10 @@ class PostsList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      shrinkWrap: true,
-      children: posts.map((post) => PostCard(post: post)).toList(),
+    return Expanded(
+      child: ListView(
+        children: posts.map((post) => PostCard(post: post)).toList(),
+      ),
     );
   }
 }

@@ -25,68 +25,58 @@ class _PageProfilState extends State<PageProfil> {
     return Column(
       children: [
         MyName(),
-        FutureBuilder(
+        SimpleFutureBuilder(
           future: ServiceFirestore.me(),
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              final me = snapshot.data!;
-              return Column(
-                spacing: 15,
-                children: [
-                  SimpleFutureBuilder(
-                    future: ServiceFirestore.member(widget.memberId),
-                    child: (member) {
-                      return Stack(
-                        alignment: Alignment.bottomLeft,
-                        children: [
-                          _cover(context, member, me),
-                          _avatar(member, me),
-                        ],
-                      );
-                    },
-                  ),
-                  Column(
-                    spacing: 10,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SimpleFutureBuilder(
-                        future: ServiceFirestore.member(widget.memberId),
-                        child: (member) {
-                          return Text("${member.firstname} ${member.lastname}");
+          child: (me) {
+            return Column(
+              spacing: 15,
+              children: [
+                SimpleFutureBuilder(
+                  future: ServiceFirestore.member(widget.memberId),
+                  child: (member) {
+                    return Stack(
+                      alignment: Alignment.bottomLeft,
+                      children: [
+                        _cover(context, member, me),
+                        _avatar(member, me),
+                      ],
+                    );
+                  },
+                ),
+                Column(
+                  spacing: 10,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SimpleFutureBuilder(
+                      future: ServiceFirestore.member(widget.memberId),
+                      child: (member) {
+                        return Text("${member.firstname} ${member.lastname}");
+                      },
+                    ),
+                    if (me.id == widget.memberId)
+                      ElevatedButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => PageProfilModif.from(me),
+                            ),
+                          ).then((value) {
+                            setState(() {});
+                          });
                         },
+                        child: Text("Modifier mes infos"),
                       ),
-                      if (me.id == widget.memberId)
-                        ElevatedButton(
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => PageProfilModif.from(me),
-                              ),
-                            ).then((value) {
-                              setState(() {});
-                            });
-                          },
-                          child: Text("Modifier mes infos"),
-                        ),
-                    ],
-                  ),
-                  Divider(height: 10),
-                ],
-              );
-            }
-            return Text("Error fetching personnal profile");
+                  ],
+                ),
+                Divider(height: 10),
+              ],
+            );
           },
         ),
-        FutureBuilder(
+        SimpleFutureBuilder(
           future: ServiceFirestore.postsByMember(widget.memberId),
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              final posts = snapshot.data!;
-              return PostsList(posts: posts);
-            }
-            return Text("No data");
-          },
+          child: (posts) => PostsList(posts: posts),
         ),
       ],
     );

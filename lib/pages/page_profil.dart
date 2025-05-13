@@ -45,7 +45,7 @@ class _PageProfilState extends State<PageProfil> {
                       );
                     },
                   ),
-                  Row(
+                  Column(
                     spacing: 10,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [

@@ -1,6 +1,7 @@
 import 'package:chti_face_bouc/modeles/post.dart';
 import 'package:chti_face_bouc/pages/common/avatar.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class PostCard extends StatelessWidget {
   final Post post;
@@ -18,12 +19,20 @@ class PostCard extends StatelessWidget {
             leading: Row(
               spacing: 10,
               mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Avatar(member: post.member),
                 Text("${post.member.firstname} ${post.member.lastname}"),
               ],
             ),
-            trailing: Text(post.date.toDate().toIso8601String()),
+            trailing: Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Text(
+                  DateFormat.yMEd().add_jm().format(post.date.toDate()),
+                ),
+              ],
+            ),
           ),
           Divider(height: 10),
           Center(

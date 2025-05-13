@@ -22,14 +22,18 @@ class Post {
     required this.member,
   });
 
-  static Post toEntity(DocumentSnapshot document, Membre membre) {
+  static Post toEntity(
+    DocumentSnapshot<Map<String, dynamic>> document,
+    Membre membre,
+  ) {
+    final data = document.data()!;
     return Post(
       reference: document.reference,
       id: document.id,
-      memberId: document['member'],
-      text: document['text'],
-      imageUrl: document['imageUrl'],
-      date: document['date'],
+      memberId: data['member'],
+      text: data['text'],
+      imageUrl: data['imageUrl'],
+      date: data['date'],
       likes: [],
       member: membre,
     );

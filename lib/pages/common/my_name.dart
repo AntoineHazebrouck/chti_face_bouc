@@ -8,31 +8,34 @@ class MyName extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // return SimpleFutureBuilder(future: memberId, child: child)
-    
-    return FutureBuilder(
+    return SimpleFutureBuilder(
       future: ServiceFirestore.me(),
-      builder: (BuildContext context, AsyncSnapshot<Membre> snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return Text("loading");
-        }
-
-        if (snapshot.hasData) {
-          final me = snapshot.data!;
-
-          return Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Align(
-              alignment: Alignment.topLeft,
-              child: Text(
-                "${me.firstname} ${me.lastname}",
-                style: TextStyle(fontSize: 30),
-              ),
+      child: (me) {
+        return Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Align(
+            alignment: Alignment.topLeft,
+            child: Text(
+              "${me.firstname} ${me.lastname}",
+              style: TextStyle(fontSize: 30),
             ),
-          );
-        }
-        return Text("No data");
+          ),
+        );
       },
     );
+
+    // return FutureBuilder(
+    //   future: ServiceFirestore.me(),
+    //   builder: (BuildContext context, AsyncSnapshot<Membre> snapshot) {
+    //     if (snapshot.connectionState == ConnectionState.waiting) {
+    //       return Text("loading");
+    //     }
+
+    //     if (snapshot.hasData) {
+    //       final me = snapshot.data!;
+    //     }
+    //     return Text("No data");
+    //   },
+    // );
   }
 }

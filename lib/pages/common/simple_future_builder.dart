@@ -19,7 +19,7 @@ class SimpleFutureBuilder<T> extends StatelessWidget {
           final data = snapshot.data!;
           return child(data);
         }
-        return Text("Error fetching member data");
+        return Text("Error fetching future data");
       },
     );
   }

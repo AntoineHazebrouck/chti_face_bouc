@@ -19,15 +19,16 @@ class Membre {
     required this.description,
   });
 
-  static Membre toEntity(DocumentSnapshot document) {
+  static Membre toEntity(DocumentSnapshot<Map<String, dynamic>> document) {
+    final data = document.data()!;
     return Membre(
       reference: document.reference,
       id: document.id,
-      coverPictureUrl: document["coverPictureUrl"] ?? '',
-      description: '',
-      firstname: document["firstname"] ?? '',
-      lastname: document["lastname"] ?? '',
-      profilePictureUrl: document["profilePictureUrl"] ?? '',
+      coverPictureUrl: data["coverPictureUrl"] ?? '',
+      description: data['description'] ?? '',
+      firstname: data["firstname"] ?? '',
+      lastname: data["lastname"] ?? '',
+      profilePictureUrl: data["profilePictureUrl"] ?? '',
     );
   }
 }

@@ -55,19 +55,20 @@ class _PageProfilState extends State<PageProfil> {
                           return Text("${member.firstname} ${member.lastname}");
                         },
                       ),
-                      ElevatedButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => PageProfilModif.from(me),
-                            ),
-                          ).then((value) {
-                            setState(() {});
-                          });
-                        },
-                        child: Text("Modifier mes infos"),
-                      ),
+                      if (me.id == widget.memberId)
+                        ElevatedButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => PageProfilModif.from(me),
+                              ),
+                            ).then((value) {
+                              setState(() {});
+                            });
+                          },
+                          child: Text("Modifier mes infos"),
+                        ),
                     ],
                   ),
                   Divider(height: 10),
@@ -124,8 +125,11 @@ class _PageProfilState extends State<PageProfil> {
         Container(
           height: 150,
           width: MediaQuery.of(context).size.width,
-          color: Colors.red,
-          child: Image.network(selected.coverPictureUrl, fit: BoxFit.cover),
+          color: Colors.blueGrey,
+          child:
+              selected.coverPictureUrl.isEmpty
+                  ? Icon(Icons.person)
+                  : Image.network(selected.coverPictureUrl, fit: BoxFit.cover),
         ),
         // TODO check on phone
         _photoSelector(selected, me, me.coverPictureUrl),

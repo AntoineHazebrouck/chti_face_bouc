@@ -78,6 +78,12 @@ class ServiceFirestore {
     return data.where((element) => element.memberId == memberId).toList();
   }
 
+  static Future<List<Membre>> allMembers() async {
+    final data = await membres.get();
+    final mapped = data.docs.map((e) => Membre.toEntity(e)).toList();
+    return mapped;
+  }
+
   static Future<Membre> member(String memberId) async {
     return await membres.doc(memberId).snapshots().map((snapshot) {
       return Membre.toEntity(snapshot);

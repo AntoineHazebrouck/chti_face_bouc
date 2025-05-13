@@ -1,4 +1,6 @@
+import 'package:chti_face_bouc/pages/common/simple_future_builder.dart';
 import 'package:chti_face_bouc/pages/page_accueil.dart';
+import 'package:chti_face_bouc/pages/page_members.dart';
 import 'package:chti_face_bouc/pages/page_profil.dart';
 import 'package:chti_face_bouc/services/service_authentification.dart';
 import 'package:chti_face_bouc/services/service_firestore.dart';
@@ -18,17 +20,12 @@ class _PageNavigationState extends State<PageNavigation> {
   Widget build(BuildContext context) {
     final bodies = [
       PageAccueil(),
-      Text("qsd"),
+      PageMembers(),
       Text("sfdgffg"),
       Text("ds"),
-      FutureBuilder(
+      SimpleFutureBuilder(
         future: ServiceFirestore.me(),
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return PageProfil(memberId: snapshot.data!.id);
-          }
-          return Text("Error fetching self profile");
-        },
+        child: (me) => PageProfil(memberId: me.id),
       ),
     ];
 

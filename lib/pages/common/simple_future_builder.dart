@@ -15,6 +15,9 @@ class SimpleFutureBuilder<T> extends StatelessWidget {
     return FutureBuilder(
       future: future,
       builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Center(child: CircularProgressIndicator());
+        }
         if (snapshot.hasData) {
           final data = snapshot.data!;
           return child(data);

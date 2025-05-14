@@ -1,5 +1,6 @@
 import 'package:chti_face_bouc/pages/common/simple_future_builder.dart';
 import 'package:chti_face_bouc/pages/page_accueil.dart';
+import 'package:chti_face_bouc/pages/page_ecrire_post.dart';
 import 'package:chti_face_bouc/pages/page_members.dart';
 import 'package:chti_face_bouc/pages/page_profil.dart';
 import 'package:chti_face_bouc/services/service_authentification.dart';
@@ -21,7 +22,7 @@ class _PageNavigationState extends State<PageNavigation> {
     final bodies = [
       PageAccueil(),
       PageMembers(),
-      Text("sfdgffg"),
+      PageEcrirePost(),
       Text("ds"),
       SimpleFutureBuilder(
         future: ServiceFirestore.me(),

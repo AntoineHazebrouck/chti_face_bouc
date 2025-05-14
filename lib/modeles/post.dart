@@ -8,7 +8,7 @@ class Post {
   final String text;
   final String? imageUrl;
   final Timestamp date;
-  final List<Membre> likes;
+  final List<String> likes; // member ids
   final Membre member;
 
   Post({
@@ -34,7 +34,7 @@ class Post {
       text: data['text'],
       imageUrl: data['imageUrl'],
       date: data['date'],
-      likes: [],
+      likes: ((data['likes'] ?? <String>[]) as List).cast<String>(),
       member: membre,
     );
   }

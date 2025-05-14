@@ -1,6 +1,7 @@
 import 'package:chti_face_bouc/modeles/post.dart';
 import 'package:chti_face_bouc/pages/common/avatar.dart';
 import 'package:chti_face_bouc/services/service_date_format.dart';
+import 'package:chti_face_bouc/services/service_firestore.dart';
 import 'package:flutter/material.dart';
 
 class PostCard extends StatelessWidget {
@@ -47,7 +48,7 @@ class PostCard extends StatelessWidget {
               children: [
                 OutlinedButton.icon(
                   onPressed: () {
-                    // TODO
+                    ServiceFirestore.addLike(post);
                   },
                   label: Text("${post.likes.length} Likes"),
                   icon: Icon(Icons.star_border),

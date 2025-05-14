@@ -124,4 +124,17 @@ class ServiceFirestore {
     }
     await posts.doc().set(data);
   }
+
+  static Future<void> addLike(Post post) async {
+    final me = await ServiceFirestore.me();
+    if (post.likes.contains(me.id)) {
+      await post.reference.update({
+        "likes": FieldValue.arrayRemove([me.id]),
+      });
+    } else {
+      await post.reference.update({
+        "likes": FieldValue.arrayUnion([me.id]),
+      });
+    }
+  }
 }

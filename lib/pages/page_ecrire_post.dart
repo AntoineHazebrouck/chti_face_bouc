@@ -74,18 +74,32 @@ class _PageEcrirePostState extends State<PageEcrirePost> {
             ),
           ),
           OutlinedButton(
-            onPressed: () async {
-              final me = await ServiceFirestore.me();
-              ServiceFirestore.createPost(
-                member: me,
-                text: post.text,
-                image: image,
-              );
-            },
+            onPressed:
+                sending
+                    ? null
+                    : () async {
+                      setState(() {
+                        sending = true;
+                      });
+                      final me = await ServiceFirestore.me();
+                      await ServiceFirestore.createPost(
+                        member: me,
+                        text: post.text,
+                        image: image,
+                      );
+
+                      post.clear();
+                      image = null;
+                      setState(() {
+                        sending = false;
+                      });
+                    },
             child: Text("Envoyer"),
           ),
         ],
       ),
     );
   }
+
+  bool sending = false;
 }

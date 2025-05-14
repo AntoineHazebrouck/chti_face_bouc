@@ -4,7 +4,7 @@ import 'package:chti_face_bouc/modeles/membre.dart';
 import 'package:chti_face_bouc/pages/common/avatar.dart';
 import 'package:chti_face_bouc/pages/common/posts_list.dart';
 import 'package:chti_face_bouc/pages/common/simple_future_builder.dart';
-import 'package:chti_face_bouc/pages/page_profil_modif.dart';
+import 'package:chti_face_bouc/pages/sub_pages/page_profil_modif.dart';
 import 'package:chti_face_bouc/services/service_firestore.dart';
 import 'package:chti_face_bouc/services/service_storage.dart';
 import 'package:flutter/material.dart';

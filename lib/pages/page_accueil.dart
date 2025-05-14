@@ -16,6 +16,7 @@ class _PageAccueilState extends State<PageAccueil> {
     return Column(
       children: [
         MyName(),
+        // TODO
         FutureBuilder(
           future: ServiceFirestore.allPosts(),
           builder: (context, snapshot) {

@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:chti_face_bouc/modeles/commentaire.dart';
 import 'package:chti_face_bouc/modeles/membre.dart';
 import 'package:chti_face_bouc/modeles/post.dart';
 import 'package:chti_face_bouc/services/service_authentification.dart';
@@ -141,5 +142,35 @@ class ServiceFirestore {
         "likes": FieldValue.arrayUnion([me.id]),
       });
     }
+  }
+
+  static Future<void> addComment({
+    required Post post,
+    required String text,
+  }) async {
+    final memberId = (await ServiceFirestore.me()).id;
+    Map<String, dynamic> map = {
+      'memberId': memberId,
+      'date': DateTime.now().millisecondsSinceEpoch,
+      'text': text,
+    };
+    await post.reference.collection("comments").doc().set(map);
+  }
+
+  static Future<List<Commentaire>> commentsByPost(String postId) async {
+    // final memberId = (await ServiceFirestore.me()).id;
+    // Map<String, dynamic> map = {
+    //   'memberId': memberId,
+    //   'date': DateTime.now().millisecondsSinceEpoch,
+    //   'text': text,
+    // };
+    final data =
+        await posts
+            .doc(postId)
+            .collection("comments")
+            .orderBy("date", descending: true)
+            .get();
+    final result = data.docs.map(Commentaire.toEntity).toList();
+    return result;
   }
 }

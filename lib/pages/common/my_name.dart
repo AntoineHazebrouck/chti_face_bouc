@@ -1,4 +1,3 @@
-import 'package:chti_face_bouc/modeles/membre.dart';
 import 'package:chti_face_bouc/pages/common/simple_future_builder.dart';
 import 'package:chti_face_bouc/services/service_firestore.dart';
 import 'package:flutter/material.dart';
@@ -23,19 +22,5 @@ class MyName extends StatelessWidget {
         );
       },
     );
-
-    // return FutureBuilder(
-    //   future: ServiceFirestore.me(),
-    //   builder: (BuildContext context, AsyncSnapshot<Membre> snapshot) {
-    //     if (snapshot.connectionState == ConnectionState.waiting) {
-    //       return Text("loading");
-    //     }
-
-    //     if (snapshot.hasData) {
-    //       final me = snapshot.data!;
-    //     }
-    //     return Text("No data");
-    //   },
-    // );
   }
 }

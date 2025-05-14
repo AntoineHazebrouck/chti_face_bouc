@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:chti_face_bouc/modeles/membre.dart';
 import 'package:chti_face_bouc/pages/common/avatar.dart';
-import 'package:chti_face_bouc/pages/common/my_name.dart';
 import 'package:chti_face_bouc/pages/common/posts_list.dart';
 import 'package:chti_face_bouc/pages/common/simple_future_builder.dart';
 import 'package:chti_face_bouc/pages/page_profil_modif.dart';
@@ -25,7 +24,6 @@ class _PageProfilState extends State<PageProfil> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        MyName(),
         SimpleFutureBuilder(
           future: ServiceFirestore.me(),
           child: (me) {

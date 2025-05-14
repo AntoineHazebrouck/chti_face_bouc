@@ -1,7 +1,7 @@
 import 'package:chti_face_bouc/modeles/post.dart';
 import 'package:chti_face_bouc/pages/common/avatar.dart';
+import 'package:chti_face_bouc/services/service_date_format.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 class PostCard extends StatelessWidget {
   final Post post;
@@ -27,11 +27,7 @@ class PostCard extends StatelessWidget {
             ),
             trailing: Column(
               mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Text(
-                  DateFormat.yMEd().add_jm().format(post.date.toDate()),
-                ),
-              ],
+              children: [Text(ServiceDateFormat.format(post.date))],
             ),
           ),
           Divider(height: 10),

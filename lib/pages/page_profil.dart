@@ -2,11 +2,12 @@ import 'dart:io';
 
 import 'package:chti_face_bouc/modeles/membre.dart';
 import 'package:chti_face_bouc/pages/common/avatar.dart';
-import 'package:chti_face_bouc/pages/common/simple_future_builder.dart';
 import 'package:chti_face_bouc/pages/common/my_name.dart';
 import 'package:chti_face_bouc/pages/common/posts_list.dart';
+import 'package:chti_face_bouc/pages/common/simple_future_builder.dart';
 import 'package:chti_face_bouc/pages/page_profil_modif.dart';
 import 'package:chti_face_bouc/services/service_firestore.dart';
+import 'package:chti_face_bouc/services/service_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -82,26 +83,32 @@ class _PageProfilState extends State<PageProfil> {
     );
   }
 
-  Widget _photoSelector(Membre selected, Membre me, String imageUrl) {
-    _takePicture(ImageSource source, String name) async {
-      final XFile? xFile = await ImagePicker().pickImage(
-        source: source,
-        maxWidth: 500,
-      );
-      if (xFile == null) return;
-      ServiceFirestore.updateImage(
-        file: File(xFile.path),
-        folder: "members",
-        memberId: me.id,
-        imageName: name,
-      );
-    }
+  Future<void> _takePicture(
+    ImageSource source,
+    ImageType folder,
+    String memberId,
+  ) async {
+    final XFile? xFile = await ImagePicker().pickImage(
+      source: source,
+      maxWidth: 500,
+    );
+    if (xFile == null) return;
+    await ServiceFirestore.updateImage(
+      file: File(xFile.path),
+      folder: folder,
+      memberId: memberId,
+      imageName: xFile.name,
+    );
+  }
 
+  Widget _photoSelector(Membre selected, Membre me, ImageType folder) {
     return Visibility(
       visible: selected.id == me.id,
       child: ElevatedButton(
         onPressed: () {
-          _takePicture(ImageSource.gallery, imageUrl);
+          _takePicture(ImageSource.gallery, folder, me.id).then((value) {
+            setState(() {});
+          });
         },
         child: Icon(Icons.photo),
       ),
@@ -122,7 +129,7 @@ class _PageProfilState extends State<PageProfil> {
                   : Image.network(selected.coverPictureUrl, fit: BoxFit.cover),
         ),
         // TODO check on phone
-        _photoSelector(selected, me, me.coverPictureUrl),
+        _photoSelector(selected, me, ImageType.cover),
       ],
     );
   }
@@ -133,7 +140,7 @@ class _PageProfilState extends State<PageProfil> {
       children: [
         Avatar(member: selected, size: 55),
         // TODO check on phone
-        _photoSelector(selected, me, me.profilePictureUrl),
+        _photoSelector(selected, me, ImageType.avatar),
       ],
     );
   }

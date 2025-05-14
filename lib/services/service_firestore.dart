@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:chti_face_bouc/modeles/membre.dart';
 import 'package:chti_face_bouc/modeles/post.dart';
 import 'package:chti_face_bouc/services/service_authentification.dart';
+import 'package:chti_face_bouc/services/service_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ServiceFirestore {
@@ -29,6 +30,7 @@ class ServiceFirestore {
     String? lastname,
     String? description,
     String? profilePictureUrl,
+    String? coverPictureUrl,
   }) async {
     final current = await member(id);
     await membres.doc(id).update({
@@ -36,29 +38,28 @@ class ServiceFirestore {
       'lastname': lastname ?? current.lastname,
       'description': description ?? current.description,
       'profilePictureUrl': profilePictureUrl ?? current.profilePictureUrl,
+      'coverPictureUrl': coverPictureUrl ?? current.coverPictureUrl,
     });
   }
 
-  static updateImage({
+  static Future<void> updateImage({
     required File file,
-    required String folder,
+    required ImageType folder,
     required String memberId,
     required String imageName,
-  }) {
-    // TODO
-    // ServiceStorage()
-    //     .addImage(
-    //       file: file,
-    //       folder: folder,
-    //       userId: memberId,
-    //       imageName: imageName,
-    //     )
-    //     .then((imageUrl) {
-    //       ServiceFirestore.updateMember(
-    //         id: memberId,
-    //         data: {imageName: imageUrl},
-    //       );
-    //     });
+  }) async {
+    final url = await ServiceStorage.addImage(
+      file: file,
+      folder: folder,
+      userId: memberId,
+      imageName: imageName,
+    );
+
+    await ServiceFirestore.updateMember(
+      id: memberId,
+      profilePictureUrl: folder == ImageType.avatar ? url : null,
+      coverPictureUrl: folder == ImageType.cover ? url : null,
+    );
   }
 
   static Future<List<Post>> allPosts() async {

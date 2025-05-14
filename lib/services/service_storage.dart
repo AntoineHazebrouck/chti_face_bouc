@@ -3,18 +3,20 @@ import 'package:firebase_storage/firebase_storage.dart';
 
 class ServiceStorage {
   static final instance = FirebaseStorage.instance;
-  Reference get ref => instance.ref();
+  static final Reference ref = instance.ref();
 
-  Future<String> addImage({
+  static Future<String> addImage({
     required File file,
-    required String folder,
+    required ImageType folder,
     required String userId,
     required String imageName,
   }) async {
-    final reference = ref.child(folder).child(userId).child(imageName);
+    final reference = ref.child(folder.name).child(userId).child(imageName);
     UploadTask task = reference.putFile(file);
     TaskSnapshot snapshot = await task.whenComplete(() => null);
     String imageUrl = await snapshot.ref.getDownloadURL();
     return imageUrl;
   }
 }
+
+enum ImageType { post, cover, avatar }

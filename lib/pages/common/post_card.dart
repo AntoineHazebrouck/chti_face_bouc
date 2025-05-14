@@ -4,10 +4,21 @@ import 'package:chti_face_bouc/services/service_date_format.dart';
 import 'package:chti_face_bouc/services/service_firestore.dart';
 import 'package:flutter/material.dart';
 
-class PostCard extends StatelessWidget {
-  final Post post;
+class PostCard extends StatefulWidget {
+  final Post parentPost;
 
-  const PostCard({super.key, required this.post});
+  const PostCard({super.key, required this.parentPost});
+
+  @override
+  State<PostCard> createState() => _PostCardState(post: parentPost);
+}
+
+class _PostCardState extends State<PostCard> {
+  Post post;
+
+  bool liking = false;
+
+  _PostCardState({required this.post});
 
   @override
   Widget build(BuildContext context) {
@@ -47,9 +58,22 @@ class PostCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 OutlinedButton.icon(
-                  onPressed: () {
-                    ServiceFirestore.addLike(post);
-                  },
+                  onPressed:
+                      liking
+                          ? null
+                          : () async {
+                            setState(() {
+                              liking = true;
+                            });
+                            await ServiceFirestore.addLike(post);
+                            final updated = await ServiceFirestore.post(
+                              post.id,
+                            );
+                            setState(() {
+                              liking = false;
+                              post = updated;
+                            });
+                          },
                   label: Text("${post.likes.length} Likes"),
                   icon: Icon(Icons.star_border),
                 ),

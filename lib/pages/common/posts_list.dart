@@ -11,7 +11,7 @@ class PostsList extends StatelessWidget {
   Widget build(BuildContext context) {
     return Expanded(
       child: ListView(
-        children: posts.map((post) => PostCard(post: post)).toList(),
+        children: posts.map((post) => PostCard(parentPost: post)).toList(),
       ),
     );
   }

@@ -63,6 +63,11 @@ class ServiceFirestore {
     );
   }
 
+  static Future<Post> post(String id) async {
+    final doc = await posts.doc(id).get();
+    return Post.toEntity(doc, await member(doc["member"]));
+  }
+
   static Future<List<Post>> allPosts() async {
     final data = await posts.orderBy("date", descending: true).get();
     final docs = data.docs;

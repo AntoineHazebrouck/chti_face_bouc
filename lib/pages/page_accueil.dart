@@ -1,5 +1,6 @@
 import 'package:chti_face_bouc/pages/common/my_name.dart';
 import 'package:chti_face_bouc/pages/common/posts_list.dart';
+import 'package:chti_face_bouc/pages/common/simple_future_builder.dart';
 import 'package:chti_face_bouc/services/service_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -16,19 +17,10 @@ class _PageAccueilState extends State<PageAccueil> {
     return Column(
       children: [
         MyName(),
-        // TODO
-        FutureBuilder(
+        SimpleFutureBuilder(
           future: ServiceFirestore.allPosts(),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return Text("loading");
-            }
-
-            if (snapshot.hasData) {
-              final posts = snapshot.data!;
-              return PostsList(posts: posts);
-            }
-            return Text("No data");
+          child: (posts) {
+            return PostsList(posts: posts);
           },
         ),
       ],

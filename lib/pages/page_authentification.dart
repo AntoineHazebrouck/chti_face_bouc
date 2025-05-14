@@ -21,12 +21,6 @@ class _PageAuthentificationState extends State<PageAuthentification> {
   final TextEditingController _lastnameController = TextEditingController();
 
   @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(

@@ -126,7 +126,6 @@ class _PageProfilState extends State<PageProfil> {
                   ? Icon(Icons.person)
                   : Image.network(selected.coverPictureUrl, fit: BoxFit.cover),
         ),
-        // TODO check on phone
         _photoSelector(selected, me, ImageType.cover),
       ],
     );
@@ -137,7 +136,6 @@ class _PageProfilState extends State<PageProfil> {
       alignment: Alignment.bottomLeft,
       children: [
         Avatar(member: selected, size: 55),
-        // TODO check on phone
         _photoSelector(selected, me, ImageType.avatar),
       ],
     );

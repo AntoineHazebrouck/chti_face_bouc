@@ -1,5 +1,9 @@
+import 'dart:io';
+
 import 'package:chti_face_bouc/pages/common/my_name.dart';
+import 'package:chti_face_bouc/services/service_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 class PageEcrirePost extends StatefulWidget {
   const PageEcrirePost({super.key});
@@ -9,6 +13,16 @@ class PageEcrirePost extends StatefulWidget {
 }
 
 class _PageEcrirePostState extends State<PageEcrirePost> {
+  final TextEditingController post = TextEditingController();
+  XFile? image;
+
+  Future<void> pickImage(ImageSource source) async {
+    final selected = await ImagePicker().pickImage(source: source);
+    setState(() {
+      image = selected;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -34,24 +48,42 @@ class _PageEcrirePostState extends State<PageEcrirePost> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 30),
                   child: TextField(
+                    controller: post,
                     decoration: InputDecoration(label: Text("Votre post")),
                   ),
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    IconButton(onPressed: () {}, icon: Icon(Icons.photo_album)),
                     IconButton(
-                      onPressed: () {},
+                      onPressed: () => pickImage(ImageSource.gallery),
+                      icon: Icon(Icons.photo_album),
+                    ),
+                    IconButton(
+                      onPressed: () => pickImage(ImageSource.camera),
                       icon: Icon(Icons.photo_camera),
                     ),
                   ],
                 ),
-                // Image.asset("resources/images/flutter_logo.png")
+                if (image != null)
+                  Padding(
+                    padding: const EdgeInsets.all(12),
+                    child: Image.file(File(image!.path)),
+                  ),
               ],
             ),
           ),
-          OutlinedButton(onPressed: () {}, child: Text("Envoyer")),
+          OutlinedButton(
+            onPressed: () async {
+              final me = await ServiceFirestore.me();
+              ServiceFirestore.createPost(
+                member: me,
+                text: post.text,
+                image: image,
+              );
+            },
+            child: Text("Envoyer"),
+          ),
         ],
       ),
     );

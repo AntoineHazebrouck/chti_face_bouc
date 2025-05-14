@@ -5,6 +5,7 @@ import 'package:chti_face_bouc/modeles/post.dart';
 import 'package:chti_face_bouc/services/service_authentification.dart';
 import 'package:chti_face_bouc/services/service_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:image_picker/image_picker.dart';
 
 class ServiceFirestore {
   static final instance = FirebaseFirestore.instance;
@@ -98,5 +99,29 @@ class ServiceFirestore {
     } else {
       return await member(id);
     }
+  }
+
+  static Future<void> createPost({
+    required Membre member,
+    required String text,
+    required XFile? image,
+  }) async {
+    final date = DateTime.now();
+    Map<String, dynamic> data = {
+      "member": member.id,
+      // likesKey: [],
+      "date": date,
+      "text": text,
+    };
+    if (image != null) {
+      final url = await ServiceStorage.addImage(
+        file: File(image.path),
+        folder: ImageType.post,
+        userId: member.id,
+        imageName: date.toString(),
+      );
+      data["imageUrl"] = url;
+    }
+    await posts.doc().set(data);
   }
 }

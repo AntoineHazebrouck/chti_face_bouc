@@ -40,7 +40,7 @@ class _PageNavigationState extends State<PageNavigation> {
             onPressed: () async {
               await ServiceAuthentification.signOut();
             },
-            child: Text("Sign out"),
+            child: Text("Déconnexion"),
           ),
         ],
       ),

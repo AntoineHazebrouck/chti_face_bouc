@@ -1,5 +1,5 @@
 import 'package:chti_face_bouc/firebase_options.dart';
-import 'package:chti_face_bouc/pages/auth_wrapper.dart';
+import 'package:chti_face_bouc/pages/sub_pages/auth_wrapper.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 

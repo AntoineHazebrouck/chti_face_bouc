@@ -64,15 +64,15 @@ class _PageDetailPostPageState extends State<PageDetailPostPage> {
               );
             },
           ),
+          Padding(padding: EdgeInsets.symmetric(vertical: 10)),
           SimpleFutureBuilder(
             future: ServiceFirestore.commentsByPost(widget.post.id),
             child: (comments) {
-              return LayoutBuilder(
-                builder: (context, constraints) {
-                  return SingleChildScrollView(
-                    child: ListView(
-                      semanticChildCount: comments.length,
-                      shrinkWrap: true,
+              return Expanded(
+                child: LayoutBuilder(
+                  builder: (context, constraints) {
+                    return ListView(
+                      // semanticChildCount: comments.length,
                       children:
                           comments.map((comment) {
                             return Column(
@@ -93,18 +93,18 @@ class _PageDetailPostPageState extends State<PageDetailPostPage> {
                                       ),
                                     ],
                                   ),
-                                  trailing: Column(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    children: [
-                                      ConstrainedBox(
-                                        constraints: constraints,
-                                        child: Text(
+                                  trailing: ConstrainedBox(
+                                    constraints: constraints,
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        Text(
                                           ServiceDateFormat.format(
                                             comment.date,
                                           ),
                                         ),
-                                      ),
-                                    ],
+                                      ],
+                                    ),
                                   ),
                                 ),
                                 Text(comment.text),
@@ -114,9 +114,9 @@ class _PageDetailPostPageState extends State<PageDetailPostPage> {
                               ],
                             );
                           }).toList(),
-                    ),
-                  );
-                },
+                    );
+                  },
+                ),
               );
             },
           ),

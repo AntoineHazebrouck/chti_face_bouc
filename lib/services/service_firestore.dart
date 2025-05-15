@@ -151,7 +151,7 @@ class ServiceFirestore {
     final memberId = (await ServiceFirestore.me()).id;
     Map<String, dynamic> map = {
       'memberId': memberId,
-      'date': DateTime.now().millisecondsSinceEpoch,
+      'date': Timestamp.fromDate(DateTime.now()),
       'text': text,
     };
     await post.reference.collection("comments").doc().set(map);
@@ -170,7 +170,14 @@ class ServiceFirestore {
             .collection("comments")
             .orderBy("date", descending: true)
             .get();
-    final result = data.docs.map(Commentaire.toEntity).toList();
+    final mapped =
+        data.docs
+            .map(
+              (doc) async =>
+                  Commentaire.toEntity(doc, await member(doc["memberId"])),
+            )
+            .toList();
+    final result = Future.wait(mapped);
     return result;
   }
 }

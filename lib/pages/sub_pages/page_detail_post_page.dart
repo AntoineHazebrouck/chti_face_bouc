@@ -2,6 +2,7 @@ import 'package:chti_face_bouc/modeles/post.dart';
 import 'package:chti_face_bouc/pages/common/avatar.dart';
 import 'package:chti_face_bouc/pages/common/post_card.dart';
 import 'package:chti_face_bouc/pages/common/simple_future_builder.dart';
+import 'package:chti_face_bouc/services/service_date_format.dart';
 import 'package:chti_face_bouc/services/service_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -54,6 +55,7 @@ class _PageDetailPostPageState extends State<PageDetailPostPage> {
 
                               setState(() {
                                 commenting = false;
+                                comment.clear();
                               });
                             },
                     icon: Icon(Icons.send),
@@ -64,27 +66,57 @@ class _PageDetailPostPageState extends State<PageDetailPostPage> {
           ),
           SimpleFutureBuilder(
             future: ServiceFirestore.commentsByPost(widget.post.id),
-            child: (data) {
-              return ListView.separated(
-                itemBuilder: (context, index) {
-                  return ListTile(
-                    leading: Row(
-                      spacing: 10,
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Avatar(member: widget.post.member),
-                        Text(
-                          "${widget.post.member.firstname} ${widget.post.member.lastname}",
-                        ),
-                      ],
+            child: (comments) {
+              return LayoutBuilder(
+                builder: (context, constraints) {
+                  return SingleChildScrollView(
+                    child: ListView(
+                      semanticChildCount: comments.length,
+                      shrinkWrap: true,
+                      children:
+                          comments.map((comment) {
+                            return Column(
+                              children: [
+                                ListTile(
+                                  leading: Row(
+                                    spacing: 10,
+                                    mainAxisSize: MainAxisSize.min,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Avatar(member: comment.member),
+                                      ConstrainedBox(
+                                        constraints: constraints,
+                                        child: Text(
+                                          "${comment.member.firstname} ${comment.member.lastname}",
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  trailing: Column(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      ConstrainedBox(
+                                        constraints: constraints,
+                                        child: Text(
+                                          ServiceDateFormat.format(
+                                            comment.date,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Text(comment.text),
+                                Padding(
+                                  padding: EdgeInsets.symmetric(vertical: 10),
+                                ),
+                              ],
+                            );
+                          }).toList(),
                     ),
                   );
                 },
-                separatorBuilder: (context, index) {
-                  return Divider(height: 10);
-                },
-                itemCount: data.length,
               );
             },
           ),

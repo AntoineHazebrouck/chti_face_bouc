@@ -74,6 +74,12 @@ class _PostCardState extends State<PostCard> {
                                     liking = true;
                                   });
                                   await ServiceFirestore.addLike(post);
+                                  await ServiceFirestore.sendNotification(
+                                    to: post.memberId,
+                                    // TODO
+                                    text: 'TODO',
+                                    postId: post.id,
+                                  );
                                   final updated = await ServiceFirestore.post(
                                     post.id,
                                   );

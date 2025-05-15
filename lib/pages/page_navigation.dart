@@ -2,6 +2,7 @@ import 'package:chti_face_bouc/pages/common/simple_future_builder.dart';
 import 'package:chti_face_bouc/pages/page_accueil.dart';
 import 'package:chti_face_bouc/pages/page_ecrire_post.dart';
 import 'package:chti_face_bouc/pages/page_members.dart';
+import 'package:chti_face_bouc/pages/page_notif.dart';
 import 'package:chti_face_bouc/pages/page_profil.dart';
 import 'package:chti_face_bouc/services/service_authentification.dart';
 import 'package:chti_face_bouc/services/service_firestore.dart';
@@ -23,7 +24,7 @@ class _PageNavigationState extends State<PageNavigation> {
       PageAccueil(),
       PageMembers(),
       PageEcrirePost(),
-      Text("ds"),
+      PageNotif(),
       SimpleFutureBuilder(
         future: ServiceFirestore.me(),
         child: (me) => PageProfil(memberId: me.id),

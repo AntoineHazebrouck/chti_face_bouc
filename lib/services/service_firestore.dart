@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:chti_face_bouc/modeles/commentaire.dart';
 import 'package:chti_face_bouc/modeles/membre.dart';
+import 'package:chti_face_bouc/modeles/notif.dart';
 import 'package:chti_face_bouc/modeles/post.dart';
 import 'package:chti_face_bouc/services/service_authentification.dart';
 import 'package:chti_face_bouc/services/service_storage.dart';
@@ -158,12 +159,6 @@ class ServiceFirestore {
   }
 
   static Future<List<Commentaire>> commentsByPost(String postId) async {
-    // final memberId = (await ServiceFirestore.me()).id;
-    // Map<String, dynamic> map = {
-    //   'memberId': memberId,
-    //   'date': DateTime.now().millisecondsSinceEpoch,
-    //   'text': text,
-    // };
     final data =
         await posts
             .doc(postId)
@@ -179,5 +174,34 @@ class ServiceFirestore {
             .toList();
     final result = Future.wait(mapped);
     return result;
+  }
+
+  static Future<void> sendNotification({
+    required String to,
+    required String text,
+    required String postId,
+  }) async {
+    final me = await ServiceFirestore.me();
+
+    Map<String, dynamic> map = {
+      "date": Timestamp.fromDate(DateTime.now()),
+      "isRead": false,
+      "from": me.id,
+      "text": text,
+      "postId": postId,
+    };
+    await membres.doc(to).collection("notifications").doc().set(map);
+  }
+
+  static Future<void> markRead(Notif notification) async {
+    await notification.reference.update({"isRead": true});
+  }
+
+  static Future<List<Notif>> notifications() async {
+    final me = await ServiceFirestore.me();
+
+    final data = await membres.doc(me.id).collection("notifications").get();
+    final mapped = data.docs.map(Notif.toEntity).toList();
+    return mapped;
   }
 }

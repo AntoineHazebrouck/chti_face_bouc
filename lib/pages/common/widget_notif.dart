@@ -7,9 +7,14 @@ import 'package:flutter/material.dart';
 import '../../modeles/notif.dart';
 
 class WidgetNotif extends StatelessWidget {
+  final void Function() refresh;
   final Notif notification;
 
-  const WidgetNotif({super.key, required this.notification});
+  const WidgetNotif({
+    super.key,
+    required this.notification,
+    required this.refresh,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -17,15 +22,19 @@ class WidgetNotif extends StatelessWidget {
       onTap: () {
         ServiceFirestore.markRead(notification);
 
-        Navigator.of(context).push(
-          MaterialPageRoute(
-            builder:
-                (context) => SimpleFutureBuilder(
-                  future: ServiceFirestore.post(notification.postId),
-                  child: (post) => PageDetailPost(post: post),
-                ),
-          ),
-        );
+        Navigator.of(context)
+            .push(
+              MaterialPageRoute(
+                builder:
+                    (context) => SimpleFutureBuilder(
+                      future: ServiceFirestore.post(notification.postId),
+                      child: (post) => PageDetailPost(post: post),
+                    ),
+              ),
+            )
+            .then((value) {
+              refresh();
+            });
       },
       child: Container(
         color:

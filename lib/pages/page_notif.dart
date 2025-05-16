@@ -21,7 +21,10 @@ class _PageNotifState extends State<PageNotif> {
             children:
                 notifications
                     .map(
-                      (notification) => WidgetNotif(notification: notification),
+                      (notification) => WidgetNotif(
+                        notification: notification,
+                        refresh: () => setState(() {}),
+                      ),
                     )
                     .toList(),
           ),

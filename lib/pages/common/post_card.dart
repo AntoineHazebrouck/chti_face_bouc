@@ -1,7 +1,6 @@
 import 'package:chti_face_bouc/modeles/post.dart';
-import 'package:chti_face_bouc/pages/common/avatar.dart';
+import 'package:chti_face_bouc/pages/common/member_header.dart';
 import 'package:chti_face_bouc/pages/sub_pages/page_detail_post.dart';
-import 'package:chti_face_bouc/services/service_date_format.dart';
 import 'package:chti_face_bouc/services/service_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -30,21 +29,7 @@ class _PostCardState extends State<PostCard> {
       child: Column(
         spacing: 10,
         children: [
-          ListTile(
-            leading: Row(
-              spacing: 10,
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Avatar(member: post.member),
-                Text("${post.member.firstname} ${post.member.lastname}"),
-              ],
-            ),
-            trailing: Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [Text(ServiceDateFormat.format(post.date))],
-            ),
-          ),
+          MemberHeader(member: post.member, date: post.date),
           Divider(height: 10),
           Center(
             child: Column(

@@ -50,7 +50,11 @@ class _PostCardState extends State<PostCard> {
             child: Column(
               children: [
                 Text(post.text),
-                if (post.imageUrl != null) Image.network(post.imageUrl!),
+                if (post.imageUrl != null)
+                  Image.network(
+                    post.imageUrl!,
+                    height: MediaQuery.of(context).size.height * 0.2,
+                  ),
               ],
             ),
           ),
@@ -106,9 +110,7 @@ class _PostCardState extends State<PostCard> {
                                     MaterialPageRoute(
                                       builder:
                                           (context) => Scaffold(
-                                            body: PageDetailPost(
-                                              post: post,
-                                            ),
+                                            body: PageDetailPost(post: post),
                                           ),
                                     ),
                                   );

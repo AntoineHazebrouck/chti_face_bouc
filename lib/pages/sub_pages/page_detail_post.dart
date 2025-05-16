@@ -6,16 +6,16 @@ import 'package:chti_face_bouc/services/service_date_format.dart';
 import 'package:chti_face_bouc/services/service_firestore.dart';
 import 'package:flutter/material.dart';
 
-class PageDetailPostPage extends StatefulWidget {
+class PageDetailPost extends StatefulWidget {
   final Post post;
 
-  const PageDetailPostPage({super.key, required this.post});
+  const PageDetailPost({super.key, required this.post});
 
   @override
-  State<PageDetailPostPage> createState() => _PageDetailPostPageState();
+  State<PageDetailPost> createState() => _PageDetailPostState();
 }
 
-class _PageDetailPostPageState extends State<PageDetailPostPage> {
+class _PageDetailPostState extends State<PageDetailPost> {
   final TextEditingController comment = TextEditingController();
 
   bool commenting = false;

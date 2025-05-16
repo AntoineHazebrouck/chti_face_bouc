@@ -1,33 +1,30 @@
+import 'package:chti_face_bouc/pages/common/simple_future_builder.dart';
+import 'package:chti_face_bouc/pages/sub_pages/page_detail_post.dart';
+import 'package:chti_face_bouc/services/service_firestore.dart';
 import 'package:flutter/material.dart';
+
 import '../../modeles/notif.dart';
 
 class WidgetNotif extends StatelessWidget {
   final Notif notification;
 
-  const WidgetNotif({super.key, required this.notification});
+  WidgetNotif({super.key, required this.notification});
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        // ServiceFirestore()
-        //     .firestorePost
-        //     .doc(notif.postId)
-        //     .get()
-        //     .then((snapshot) {
-        //   ServiceFirestore().markRead(notif.reference);
-        //   final post = Post(
-        //     reference: snapshot.reference,
-        //     id: snapshot.id,
-        //     map: snapshot.data() as Map<String, dynamic>,
-        //     // Post
-        //   );
-        //   Navigator.of(context).push(
-        //     MaterialPageRoute(builder: (context) {
-        //       return PageDetailPost(post: post);
-        //     }), // MaterialPageRoute
-        //   );
-        // });
+        ServiceFirestore.markRead(notification);
+
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder:
+                (context) => SimpleFutureBuilder(
+                  future: ServiceFirestore.post(notification.postId),
+                  child: (post) => PageDetailPost(post: post),
+                ),
+          ),
+        );
       },
       child: Container(
         color:

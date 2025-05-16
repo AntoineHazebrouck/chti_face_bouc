@@ -1,6 +1,6 @@
 import 'package:chti_face_bouc/modeles/post.dart';
 import 'package:chti_face_bouc/pages/common/avatar.dart';
-import 'package:chti_face_bouc/pages/sub_pages/page_detail_post_page.dart';
+import 'package:chti_face_bouc/pages/sub_pages/page_detail_post.dart';
 import 'package:chti_face_bouc/services/service_date_format.dart';
 import 'package:chti_face_bouc/services/service_firestore.dart';
 import 'package:flutter/material.dart';
@@ -74,10 +74,11 @@ class _PostCardState extends State<PostCard> {
                                     liking = true;
                                   });
                                   await ServiceFirestore.addLike(post);
+                                  final me = await ServiceFirestore.me();
                                   await ServiceFirestore.sendNotification(
                                     to: post.memberId,
-                                    // TODO
-                                    text: 'TODO',
+                                    text:
+                                        "${me.firstname} ${me.lastname} liked your post",
                                     postId: post.id,
                                   );
                                   final updated = await ServiceFirestore.post(
@@ -105,7 +106,7 @@ class _PostCardState extends State<PostCard> {
                                     MaterialPageRoute(
                                       builder:
                                           (context) => Scaffold(
-                                            body: PageDetailPostPage(
+                                            body: PageDetailPost(
                                               post: post,
                                             ),
                                           ),

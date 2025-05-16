@@ -1,3 +1,4 @@
+import 'package:chti_face_bouc/pages/common/member_header.dart';
 import 'package:chti_face_bouc/pages/common/simple_future_builder.dart';
 import 'package:chti_face_bouc/pages/sub_pages/page_detail_post.dart';
 import 'package:chti_face_bouc/services/service_firestore.dart';
@@ -8,7 +9,7 @@ import '../../modeles/notif.dart';
 class WidgetNotif extends StatelessWidget {
   final Notif notification;
 
-  WidgetNotif({super.key, required this.notification});
+  const WidgetNotif({super.key, required this.notification});
 
   @override
   Widget build(BuildContext context) {
@@ -36,10 +37,15 @@ class WidgetNotif extends StatelessWidget {
         padding: const EdgeInsets.all(8),
         child: Column(
           children: [
-            // MemberHeader(
-            //   memberId: notif.from,
-            //   date: notif.date,
-            // ),
+            SimpleFutureBuilder(
+              future: ServiceFirestore.post(notification.postId),
+              child:
+                  (post) => MemberHeader(
+                    member: post.member,
+                    date: notification.date,
+                  ),
+            ),
+
             Text(notification.text),
           ],
         ),

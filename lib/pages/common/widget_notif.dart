@@ -50,7 +50,7 @@ class WidgetNotif extends StatelessWidget {
               future: ServiceFirestore.post(notification.postId),
               child:
                   (post) => MemberHeader(
-                    member: post.member,
+                    member: notification.sender,
                     date: notification.date,
                   ),
             ),

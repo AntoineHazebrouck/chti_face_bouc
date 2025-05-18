@@ -216,7 +216,15 @@ class ServiceFirestore {
 
     final data =
         await membres.doc(me.id).collection(NotifsCollection.collection).get();
-    final mapped = data.docs.map(Notif.toEntity).toList();
-    return mapped;
+    final mapped =
+        data.docs
+            .map(
+              (doc) async =>
+                  Notif.toEntity(doc, await member(doc[NotifsCollection.from])),
+            )
+            .toList();
+
+    final toto = Future.wait(mapped);
+    return toto;
   }
 }

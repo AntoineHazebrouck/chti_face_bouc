@@ -1,15 +1,19 @@
+import 'package:chti_face_bouc/modeles/database.dart';
+import 'package:chti_face_bouc/modeles/membre.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Notif {
   final DocumentReference reference;
   final String id;
   final String from;
+  final Membre sender;
   final String text;
   final Timestamp date;
   final bool isRead;
   final String postId;
 
   Notif({
+    required this.sender,
     required this.from,
     required this.text,
     required this.date,
@@ -19,16 +23,20 @@ class Notif {
     required this.id,
   });
 
-  static Notif toEntity(DocumentSnapshot<Map<String, dynamic>> document) {
+  static Notif toEntity(
+    DocumentSnapshot<Map<String, dynamic>> document,
+    Membre sender,
+  ) {
     final data = document.data()!;
     return Notif(
       reference: document.reference,
       id: document.id,
-      date: data['date'],
-      from: data['from'],
-      isRead: data['isRead'],
-      text: data['text'],
-      postId: data['postId'],
+      sender: sender,
+      date: data[NotifsCollection.date],
+      from: data[NotifsCollection.from],
+      isRead: data[NotifsCollection.isRead],
+      text: data[NotifsCollection.text],
+      postId: data[NotifsCollection.postId],
     );
   }
 }

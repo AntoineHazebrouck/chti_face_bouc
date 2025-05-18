@@ -1,3 +1,4 @@
+import 'package:chti_face_bouc/modeles/database.dart';
 import 'package:chti_face_bouc/modeles/membre.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -30,11 +31,12 @@ class Post {
     return Post(
       reference: document.reference,
       id: document.id,
-      memberId: data['member'],
-      text: data['text'],
-      imageUrl: data['imageUrl'],
-      date: data['date'],
-      likes: ((data['likes'] ?? <String>[]) as List).cast<String>(),
+      memberId: data[PostsCollection.memberId],
+      text: data[PostsCollection.text],
+      imageUrl: data[PostsCollection.imageUrl],
+      date: data[PostsCollection.date],
+      likes:
+          ((data[PostsCollection.likes] ?? <String>[]) as List).cast<String>(),
       member: membre,
     );
   }

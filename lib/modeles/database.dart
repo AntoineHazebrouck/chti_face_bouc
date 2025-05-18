@@ -10,7 +10,13 @@ class MembersCollection {
 }
 
 class PostsCollection {
-  static const collection = "members";
+  static const collection = "posts";
+
+  static const text = "text";
+  static const date = "date";
+  static const likes = "likes";
+  static const imageUrl = "image";
+  static const memberId = "memberId";
 }
 
 class CommentsCollection {

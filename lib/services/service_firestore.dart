@@ -14,7 +14,7 @@ class ServiceFirestore {
   static final instance = FirebaseFirestore.instance;
 
   static final membres = instance.collection(MembersCollection.collection);
-  static final posts = instance.collection("posts");
+  static final posts = instance.collection(PostsCollection.collection);
 
   static Future<void> addMember({
     required String id,
@@ -70,15 +70,19 @@ class ServiceFirestore {
 
   static Future<Post> post(String id) async {
     final doc = await posts.doc(id).get();
-    return Post.toEntity(doc, await member(doc["member"]));
+    return Post.toEntity(doc, await member(doc[PostsCollection.memberId]));
   }
 
   static Future<List<Post>> allPosts() async {
-    final data = await posts.orderBy("date", descending: true).get();
+    final data =
+        await posts.orderBy(PostsCollection.date, descending: true).get();
     final docs = data.docs;
     final mapped =
         docs.map((doc) async {
-          return Post.toEntity(doc, await member(doc["member"]));
+          return Post.toEntity(
+            doc,
+            await member(doc[PostsCollection.memberId]),
+          );
         }).toList();
 
     final toto = Future.wait(mapped);
@@ -118,10 +122,9 @@ class ServiceFirestore {
   }) async {
     final date = DateTime.now();
     Map<String, dynamic> data = {
-      "member": member.id,
-      // likesKey: [],
-      "date": date,
-      "text": text,
+      PostsCollection.memberId: member.id,
+      PostsCollection.date: date,
+      PostsCollection.text: text,
     };
     if (image != null) {
       final url = await ServiceStorage.addImage(
@@ -130,7 +133,7 @@ class ServiceFirestore {
         userId: member.id,
         imageName: date.toString(),
       );
-      data["imageUrl"] = url;
+      data[PostsCollection.imageUrl] = url;
     }
     await posts.doc().set(data);
   }
@@ -139,11 +142,11 @@ class ServiceFirestore {
     final me = await ServiceFirestore.me();
     if (post.likes.contains(me.id)) {
       await post.reference.update({
-        "likes": FieldValue.arrayRemove([me.id]),
+        PostsCollection.likes: FieldValue.arrayRemove([me.id]),
       });
     } else {
       await post.reference.update({
-        "likes": FieldValue.arrayUnion([me.id]),
+        PostsCollection.likes: FieldValue.arrayUnion([me.id]),
       });
     }
   }

@@ -1,14 +1,17 @@
+import 'package:chti_face_bouc/modeles/database.dart';
 import 'package:chti_face_bouc/modeles/membre.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Commentaire {
   final DocumentReference reference;
   final String id;
+  final String memberId;
   final Membre member;
   final String text;
   final Timestamp date;
 
   Commentaire({
+    required this.memberId,
     required this.member,
     required this.text,
     required this.date,
@@ -23,8 +26,9 @@ class Commentaire {
     final data = document.data()!;
     return Commentaire(
       member: member,
-      text: data['text'],
-      date: data['date'],
+      memberId: data[CommentsCollection.memberId],
+      text: data[CommentsCollection.text],
+      date: data[CommentsCollection.date],
       reference: document.reference,
       id: document.id,
     );

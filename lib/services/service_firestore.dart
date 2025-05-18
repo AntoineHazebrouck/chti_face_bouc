@@ -22,7 +22,6 @@ class ServiceFirestore {
     required String lastname,
   }) {
     return membres.doc(id).set({
-      MembersCollection.id: id,
       MembersCollection.firstname: firstname,
       MembersCollection.lastname: lastname,
     });
@@ -157,25 +156,30 @@ class ServiceFirestore {
   }) async {
     final memberId = (await ServiceFirestore.me()).id;
     Map<String, dynamic> map = {
-      'memberId': memberId,
-      'date': Timestamp.fromDate(DateTime.now()),
-      'text': text,
+      CommentsCollection.memberId: memberId,
+      CommentsCollection.date: Timestamp.fromDate(DateTime.now()),
+      CommentsCollection.text: text,
     };
-    await post.reference.collection("comments").doc().set(map);
+    await post.reference
+        .collection(CommentsCollection.collection)
+        .doc()
+        .set(map);
   }
 
   static Future<List<Commentaire>> commentsByPost(String postId) async {
     final data =
         await posts
             .doc(postId)
-            .collection("comments")
-            .orderBy("date", descending: true)
+            .collection(CommentsCollection.collection)
+            .orderBy(CommentsCollection.date, descending: true)
             .get();
     final mapped =
         data.docs
             .map(
-              (doc) async =>
-                  Commentaire.toEntity(doc, await member(doc["memberId"])),
+              (doc) async => Commentaire.toEntity(
+                doc,
+                await member(doc[CommentsCollection.memberId]),
+              ),
             )
             .toList();
     final result = Future.wait(mapped);

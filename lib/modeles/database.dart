@@ -1,7 +1,6 @@
 class MembersCollection {
   static const collection = "members";
 
-  static const id = "memberID";
   static const firstname = "name";
   static const lastname = "surname";
   static const description = "description";
@@ -21,6 +20,10 @@ class PostsCollection {
 
 class CommentsCollection {
   static const collection = "comments";
+
+  static const text = "text";
+  static const date = "date";
+  static const memberId = "memberId";
 }
 
 class NotifsCollection {

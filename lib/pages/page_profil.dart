@@ -27,49 +27,49 @@ class _PageProfilState extends State<PageProfil> {
         SimpleFutureBuilder(
           future: ServiceFirestore.me(),
           child: (me) {
-            return Column(
-              spacing: 15,
-              children: [
-                SimpleFutureBuilder(
-                  future: ServiceFirestore.member(widget.memberId),
-                  child: (member) {
-                    return Stack(
-                      alignment: Alignment.bottomLeft,
-                      children: [
-                        _cover(context, member, me),
-                        _avatar(member, me),
-                      ],
-                    );
-                  },
-                ),
-                Column(
-                  spacing: 10,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SimpleFutureBuilder(
-                      future: ServiceFirestore.member(widget.memberId),
-                      child: (member) {
-                        return Text("${member.firstname} ${member.lastname}");
-                      },
-                    ),
-                    if (me.id == widget.memberId)
-                      ElevatedButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => PageProfilModif.from(me),
-                            ),
-                          ).then((value) {
-                            setState(() {});
-                          });
-                        },
-                        child: Text("Modifier mes infos"),
+            return SimpleFutureBuilder(
+              future: ServiceFirestore.member(widget.memberId),
+              child:
+                  (member) => Column(
+                    spacing: 15,
+                    children: [
+                      Stack(
+                        alignment: Alignment.bottomLeft,
+                        children: [
+                          _cover(context, member, me),
+                          _avatar(member, me),
+                        ],
                       ),
-                  ],
-                ),
-                Divider(height: 10),
-              ],
+                      Column(
+                        spacing: 10,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "${member.firstname} ${member.lastname}",
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          if (member.description.isNotEmpty)
+                            Text(member.description),
+                          if (me.id == widget.memberId)
+                            ElevatedButton(
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder:
+                                        (context) => PageProfilModif.from(me),
+                                  ),
+                                ).then((value) {
+                                  setState(() {});
+                                });
+                              },
+                              child: Text("Modifier mes infos"),
+                            ),
+                        ],
+                      ),
+                      Divider(height: 10),
+                    ],
+                  ),
             );
           },
         ),

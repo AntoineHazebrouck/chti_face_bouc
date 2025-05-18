@@ -52,7 +52,6 @@ class PageProfilModif extends StatelessWidget {
                 controller: lastname,
               ),
               TextField(
-                obscureText: true,
                 decoration: InputDecoration(label: Text("Description")),
                 controller: description,
               ),

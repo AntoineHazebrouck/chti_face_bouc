@@ -1,3 +1,4 @@
+import 'package:chti_face_bouc/modeles/database.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Membre {
@@ -24,11 +25,11 @@ class Membre {
     return Membre(
       reference: document.reference,
       id: document.id,
-      coverPictureUrl: data["coverPictureUrl"] ?? '',
-      description: data['description'] ?? '',
-      firstname: data["firstname"] ?? '',
-      lastname: data["lastname"] ?? '',
-      profilePictureUrl: data["profilePictureUrl"] ?? '',
+      coverPictureUrl: data[MembersCollection.coverPictureUrl] ?? '',
+      description: data[MembersCollection.description] ?? '',
+      firstname: data[MembersCollection.firstname] ?? '',
+      lastname: data[MembersCollection.lastname] ?? '',
+      profilePictureUrl: data[MembersCollection.profilePictureUrl] ?? '',
     );
   }
 }

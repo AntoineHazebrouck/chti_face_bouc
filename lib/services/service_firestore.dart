@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:chti_face_bouc/modeles/commentaire.dart';
+import 'package:chti_face_bouc/modeles/database.dart';
 import 'package:chti_face_bouc/modeles/membre.dart';
 import 'package:chti_face_bouc/modeles/notif.dart';
 import 'package:chti_face_bouc/modeles/post.dart';
@@ -12,7 +13,7 @@ import 'package:image_picker/image_picker.dart';
 class ServiceFirestore {
   static final instance = FirebaseFirestore.instance;
 
-  static final membres = instance.collection("members");
+  static final membres = instance.collection(MembersCollection.collection);
   static final posts = instance.collection("posts");
 
   static Future<void> addMember({
@@ -21,9 +22,9 @@ class ServiceFirestore {
     required String lastname,
   }) {
     return membres.doc(id).set({
-      'id': id,
-      'firstname': firstname,
-      'lastname': lastname,
+      MembersCollection.id: id,
+      MembersCollection.firstname: firstname,
+      MembersCollection.lastname: lastname,
     });
   }
 
@@ -37,11 +38,13 @@ class ServiceFirestore {
   }) async {
     final current = await member(id);
     await membres.doc(id).update({
-      'firstname': firstname ?? current.firstname,
-      'lastname': lastname ?? current.lastname,
-      'description': description ?? current.description,
-      'profilePictureUrl': profilePictureUrl ?? current.profilePictureUrl,
-      'coverPictureUrl': coverPictureUrl ?? current.coverPictureUrl,
+      MembersCollection.firstname: firstname ?? current.firstname,
+      MembersCollection.lastname: lastname ?? current.lastname,
+      MembersCollection.description: description ?? current.description,
+      MembersCollection.profilePictureUrl:
+          profilePictureUrl ?? current.profilePictureUrl,
+      MembersCollection.coverPictureUrl:
+          coverPictureUrl ?? current.coverPictureUrl,
     });
   }
 

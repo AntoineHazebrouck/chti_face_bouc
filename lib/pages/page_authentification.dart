@@ -29,7 +29,7 @@ class _PageAuthentificationState extends State<PageAuthentification> {
             child: Column(
               spacing: 10,
               children: [
-                Image.asset("resources/images/jul.jpg"),
+                Image.asset("resources/images/auth_page.png"),
                 SegmentedButton<bool>(
                   segments: [
                     ButtonSegment(

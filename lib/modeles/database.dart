@@ -28,4 +28,10 @@ class CommentsCollection {
 
 class NotifsCollection {
   static const collection = "notifications";
+
+  static const from = "from";
+  static const text = "text";
+  static const postId = "postID";
+  static const isRead = "read";
+  static const date = "date";
 }

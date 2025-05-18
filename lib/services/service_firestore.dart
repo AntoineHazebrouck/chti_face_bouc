@@ -194,23 +194,28 @@ class ServiceFirestore {
     final me = await ServiceFirestore.me();
 
     Map<String, dynamic> map = {
-      "date": Timestamp.fromDate(DateTime.now()),
-      "isRead": false,
-      "from": me.id,
-      "text": text,
-      "postId": postId,
+      NotifsCollection.date: Timestamp.fromDate(DateTime.now()),
+      NotifsCollection.isRead: false,
+      NotifsCollection.from: me.id,
+      NotifsCollection.text: text,
+      NotifsCollection.postId: postId,
     };
-    await membres.doc(to).collection("notifications").doc().set(map);
+    await membres
+        .doc(to)
+        .collection(NotifsCollection.collection)
+        .doc()
+        .set(map);
   }
 
   static Future<void> markRead(Notif notification) async {
-    await notification.reference.update({"isRead": true});
+    await notification.reference.update({NotifsCollection.isRead: true});
   }
 
   static Future<List<Notif>> notifications() async {
     final me = await ServiceFirestore.me();
 
-    final data = await membres.doc(me.id).collection("notifications").get();
+    final data =
+        await membres.doc(me.id).collection(NotifsCollection.collection).get();
     final mapped = data.docs.map(Notif.toEntity).toList();
     return mapped;
   }
